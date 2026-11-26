@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi biblioteca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1b2c;--deep:#14263d;--line:#243a57;--ink:#f1ece2;--mut:#9fb0c3;--lamp:#f2b84b;--paper:#efe6d2;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);min-height:100vh}
+h1,h2,h3,.serif{font-family:Fraunces,Georgia,"Times New Roman",serif;font-weight:700;margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+.top{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:20px 5vw}
+.logo{font-size:1.5rem;text-decoration:none}
+.search{flex:1 1 220px;max-width:420px;background:var(--deep);border:1px solid var(--line);border-radius:999px;padding:10px 18px;color:var(--ink);font:inherit}
+.search::placeholder{color:var(--mut)}
+main{padding:0 5vw 60px}
+.sec{margin:28px 0 40px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-h h2{font-size:1.4rem}
+.arrows{display:flex;gap:8px}
+.arrows button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--deep)}
+.arrows button:hover{border-color:var(--lamp);color:var(--lamp)}
+.row{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px 2px 14px;scrollbar-width:thin}
+.card{flex:none;width:168px;scroll-snap-align:start;text-decoration:none;display:block}
+.cv{aspect-ratio:2/3;border-radius:6px 12px 12px 6px;overflow:hidden;background:var(--deep);box-shadow:-3px 0 0 rgba(0,0,0,.35) inset,0 10px 24px rgba(0,0,0,.45);transition:transform .2s}
+.card:hover .cv{transform:translateY(-6px)}
+.cv img{width:100%;height:100%;object-fit:cover;display:block}
+.fb{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:1.05rem;line-height:1.2;background:linear-gradient(160deg,#27456b,#0e1b2c);color:var(--paper)}
+.card b{display:block;margin-top:12px;font-weight:600;line-height:1.3}
+.card small{color:var(--mut)}
+.empty{color:var(--mut);padding:40px 0}
+/* página del libro */
+.back{background:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;margin:6px 0 24px}
+.back:hover{border-color:var(--lamp)}
+.detail{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:48px;align-items:start}
+.detail .cv{max-width:340px}
+.info h1{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1}
+.meta{color:var(--mut);margin:10px 0 18px}
+.syn{max-width:62ch;font-family:Fraunces,Georgia,serif;font-weight:500;line-height:1.7;color:#e6dfd0}
+.tabs{display:flex;gap:8px;margin:28px 0 18px}
+.tabs button{padding:10px 22px;border-radius:999px;border:1px solid var(--line);background:var(--deep)}
+.tabs button[aria-selected=true]{background:var(--lamp);border-color:var(--lamp);color:#241a05;font-weight:600}
+.panel{border:1px solid var(--line);border-radius:14px;background:var(--deep);overflow:hidden}
+.stage{display:flex;flex-direction:column;align-items:center;gap:14px;padding:36px 12px 24px;background:radial-gradient(ellipse at 50% 30%,#1d3555,#10203a 70%)}
+.scene{perspective:1100px;width:220px;height:340px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.scene:active{cursor:grabbing}
+.book{width:220px;height:320px;position:relative;transform-style:preserve-3d;margin-top:10px}
+.f{position:absolute;backface-visibility:hidden;overflow:hidden}
+.f.front{width:220px;height:320px;transform:translateZ(22px);border-radius:3px 8px 8px 3px}
+.f.front img{width:100%;height:100%;object-fit:cover;display:block}
+.f.back{width:220px;height:320px;transform:rotateY(180deg) translateZ(22px);background:#1a2f4d;color:var(--paper);padding:20px;font:500 .78rem/1.5 Fraunces,Georgia,serif;display:flex;align-items:center}
+.f.spine{width:44px;height:320px;left:88px;transform:rotateY(-90deg) translateZ(110px);background:#17304f;display:flex;align-items:center;justify-content:center}
+.f.spine span{writing-mode:vertical-rl;transform:rotate(180deg);font:700 .85rem Fraunces,Georgia,serif;color:var(--paper);white-space:nowrap;overflow:hidden;max-height:290px}
+.f.pages{width:44px;height:314px;left:88px;top:3px;transform:rotateY(90deg) translateZ(110px);background:repeating-linear-gradient(90deg,var(--paper) 0 2px,#d9cdb2 2px 3px)}
+.hint{color:var(--mut);font-size:.9rem;margin:0}
+.pdfbar{display:flex;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line)}
+.btn{display:inline-block;padding:9px 18px;border-radius:999px;border:1px solid var(--lamp);text-decoration:none;color:var(--lamp)}
+.btn:hover{background:var(--lamp);color:#241a05}
+iframe{display:block;width:100%;height:78vh;border:0;background:#fff}
+@media(max-width:760px){.detail{grid-template-columns:1fr;gap:28px}.detail .cv{max-width:220px;margin:0 auto}.card{width:140px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo serif" href="#" id="home-link">Mi biblioteca</a>
+  <input class="search" id="q" type="search" placeholder="Buscar por título o autor" aria-label="Buscar por título o autor">
+</header>
+<main id="app"></main>
+
+<script src="libros.js"></script>
+<script>
+const app = document.getElementById("app");
+const q = document.getElementById("q");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let raf = 0;
+
+function cover(l){
+  const fb = `<div class="fb">${esc(l.titulo)}</div>`;
+  return `<div class="cv"><img src="${esc(l.portada)}" alt="Portada de ${esc(l.titulo)}" loading="lazy" onerror="this.outerHTML=this.parentNode.dataset.fb" ></div>`.replace('<div class="cv">', `<div class="cv" data-fb="${esc(fb)}">`);
+}
+
+function home(){
+  cancelAnimationFrame(raf);
+  const t = q.value.trim().toLowerCase();
+  const lista = LIBROS.filter(l => (l.titulo + " " + l.autor).toLowerCase().includes(t));
+  if(!lista.length){ app.innerHTML = '<p class="empty">No encontramos libros con esa búsqueda.</p>'; return; }
+  const grupos = {};
+  lista.forEach(l => (grupos[l.genero] ||= []).push(l));
+  const reciente = [...lista].sort((a,b) => b.anio - a.anio).slice(0,12);
+  const secciones = [["Agregados recientemente", reciente], ...Object.entries(grupos)];
+  app.innerHTML = secciones.map(([nombre, libros], i) => `
+    <section class="sec">
+      <div class="sec-h"><h2>${esc(nombre)}</h2>
+        <div class="arrows"><button data-s="${i}" data-d="-1" aria-label="Anterior">‹</button><button data-s="${i}" data-d="1" aria-label="Siguiente">›</button></div></div>
+      <div class="row" id="row${i}">${libros.map(l => `
+        <a class="card" href="#${esc(l.id)}">${cover(l)}<b>${esc(l.titulo)}</b><small>${esc(l.autor)}, ${l.anio}</small></a>`).join("")}</div>
+    </section>`).join("");
+}
+
+function detalle(l){
+  app.innerHTML = `
+    <button class="back" id="back">Volver a la biblioteca</button>
+    <div class="detail">
+      ${cover(l)}
+      <div class="info">
+        <h1>${esc(l.titulo)}</h1>
+        <p class="meta">${esc(l.autor)}, ${esc(l.genero)}, ${l.anio}</p>
+        <p class="syn">${esc(l.sinopsis)}</p>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-t="3d">Ver en 3D</button>
+          <button role="tab" aria-selected="false" data-t="pdf">Leer como PDF</button>
+        </div>
+        <div class="panel" id="panel"></div>
+      </div>
+    </div>`;
+  document.getElementById("back").onclick = () => { location.hash = ""; };
+  const tabs = app.querySelectorAll(".tabs button");
+  tabs.forEach(b => b.onclick = () => {
+    tabs.forEach(x => x.setAttribute("aria-selected", x === b));
+    b.dataset.t === "3d" ? libro3d(l) : lector(l);
+  });
+  libro3d(l);
+}
+
+function lector(l){
+  cancelAnimationFrame(raf);
+  document.getElementById("panel").innerHTML = `
+    <div class="pdfbar"><a class="btn" href="${esc(l.pdf)}" target="_blank" rel="noopener">Abrir en pantalla completa</a><a class="btn" href="${esc(l.pdf)}" download>Descargar PDF</a></div>
+    <iframe src="${esc(l.pdf)}" title="PDF de ${esc(l.titulo)}"></iframe>`;
+}
+
+function libro3d(l){
+  document.getElementById("panel").innerHTML = `
+    <div class="stage">
+      <div class="scene" id="scene"><div class="book" id="book">
+        <div class="f front">${cover(l).replace('class="cv"','style="height:100%"')}</div>
+        <div class="f back">${esc(l.sinopsis)}</div>
+        <div class="f spine"><span>${esc(l.titulo)}</span></div>
+        <div class="f pages"></div>
+      </div></div>
+      <p class="hint">Arrastra el libro para girarlo</p>
+    </div>`;
+  const book = document.getElementById("book"), scene = document.getElementById("scene");
+  let ang = -25, drag = false, x0 = 0, a0 = 0, auto = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const paint = () => book.style.transform = `rotateX(-8deg) rotateY(${ang}deg)`;
+  const loop = () => { if(auto && !drag){ ang += 0.35; paint(); } raf = requestAnimationFrame(loop); };
+  scene.addEventListener("pointerdown", e => { drag = true; auto = false; x0 = e.clientX; a0 = ang; scene.setPointerCapture(e.pointerId); });
+  scene.addEventListener("pointermove", e => { if(drag){ ang = a0 + (e.clientX - x0) * 0.6; paint(); } });
+  ["pointerup","pointercancel"].forEach(ev => scene.addEventListener(ev, () => drag = false));
+  paint(); cancelAnimationFrame(raf); loop();
+}
+
+function ruta(){
+  const l = LIBROS.find(x => x.id === location.hash.slice(1));
+  window.scrollTo(0, 0);
+  l ? detalle(l) : home();
+}
+
+app.addEventListener("click", e => {
+  const b = e.target.closest(".arrows button");
+  if(!b) return;
+  const r = document.getElementById("row" + b.dataset.s);
+  r.scrollBy({ left: b.dataset.d * r.clientWidth * 0.85, behavior: "smooth" });
+});
+q.addEventListener("input", () => { if(location.hash) location.hash = ""; else home(); });
+window.addEventListener("hashchange", ruta);
+ruta();
+</script>
+</body>
+</html>
