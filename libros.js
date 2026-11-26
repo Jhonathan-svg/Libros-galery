@@ -4,11 +4,11 @@ const LIBROS = [
   {
     id: "el-guardian",
     titulo: "El guardián que se ganó mi corazón",
-    autor: "Tu nombre aquí",
+    autor: "Jhonathan",
     genero: "Novela romántica",
     anio: 2026,
-    portada: "libros/el-guardian/portada.jpg",
-    pdf: "libros/el-guardian/libro.pdf",
+    portada:"libros/el%20guardian/Gemini_Generated_Image_87or2d87or2d87or.jpg",
+pdf: "libros/el%20guardian/El_Guardian_Que_Se_Gano_Mi_Corazon.pdf",
     sinopsis: "James no tiene estudios, ni dinero, ni apellido. Tiene las manos de quien aprendió a defenderse solo y una promesa que le hizo a su madre antes de que muriera. Una noche de lluvia salva a Valentina de un asalto, y ella, hija de una familia acomodada y sola entre muros altos, publica un anuncio buscando guardaespaldas."
   }
   // , { id: "otro-libro", titulo: "…", autor: "…", genero: "Cuento", anio: 2026,
